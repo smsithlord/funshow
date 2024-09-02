@@ -28,7 +28,11 @@ There are `dev_` versions of the following files which will load the SRC scripts
 # Building New Distribution Files
 There is a tool in `src/packer_tool.html` that can be ran from a LOCAL SERVER that lets you BUILD ALL which gives you the following files: funshow-builder.min.js, funshow-shared.min.js, funshow-viewer.min.js.  
 
-**Building & deploying to your own site currently requires creating a custom viewer.html file. (See code comments in dev_viewer.html)** This is because JSON is the only export option in the BUILDER. There are plans to add support for exporting a pre-baked HTML file for developers to deploy unchanged directly to their server, but this is not yet implemented.
+# Creating a Website w/ FunShow & Deploying It
+1. Download this repo, double-click on `index.html` & create a slideshow in the BUILDER
+2. Export your slideshow as a `.json` file
+3. Upload the `viewer.html`, `dist` folder, AND your slideshow's `.json` file to your website
+4. Go to `viewer.html?s=YOUR_JSON_FILE_NAME.json` to view your slideshow
 
 # Additional Help
 If you actually use this & need help getting it working or fixing bugs, the best way to contact me is finding me on Twitch, Twitter, or Discord.
