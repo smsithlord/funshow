@@ -30,9 +30,10 @@ There is a tool in `src/packer_tool.html` that can be ran from a LOCAL SERVER th
 
 # Creating a Website w/ FunShow & Deploying It
 1. Download this repo, double-click on `index.html` & create a slideshow in the BUILDER
-2. Export your slideshow as a `.json` file
-3. Upload the `viewer.html`, `dist` folder, AND your slideshow's `.json` file to your website
-4. Go to `viewer.html?s=YOUR_JSON_FILE_NAME.json` to view your slideshow
+2. Make sure you set the `CONTENT PATH` to the path (relative to viewer.html) where your images will be hosted.
+3. Export your slideshow as a `.json` file
+4. Upload the `viewer.html`, `dist` folder, AND your slideshow's `.json` file to your website
+5. Go to `viewer.html?s=YOUR_JSON_FILE_NAME.json` to view your slideshow
 
 # Additional Help
 If you actually use this & need help getting it working or fixing bugs, the best way to contact me is finding me on Twitch, Twitter, or Discord.
