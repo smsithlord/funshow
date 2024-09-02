@@ -1,7 +1,7 @@
 # FunShow
-FunShow is an tool for creating and viewing interactive slideshows of text, images, & videos.
-It supports using it as an INDIVIDUAL in OFFLINE MODE, or using it as a DEVELOPER deploying it in SERVER MODE.
-For usage help, open index.html and click HELP.
+FunShow is an tool for creating and viewing interactive slideshows of text, images, & videos.  
+It supports using it as an INDIVIDUAL in OFFLINE MODE, or using it as a DEVELOPER deploying it in SERVER MODE.  
+For usage help, open index.html and click HELP.  
 
 # Live Demo
 https://smsithlord.github.io/funshow/
@@ -10,7 +10,7 @@ https://smsithlord.github.io/funshow/
 Tested Working: Edge & Chrome & Firefox on Windows, Chrome on Android, Safari on iPhone
 
 # BUILDER Compatibility
-Tested Working: Edge & Chrome on Windows
+Tested Working: Edge & Chrome on Windows  
 Tested NOT Working (drag & drop fails): Firefox on Windows, Brave on Linux
 
 # ALPHA
