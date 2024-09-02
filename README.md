@@ -6,6 +6,13 @@ For usage help, open index.html and click HELP.
 # Live Demo
 https://smsithlord.github.io/funshow/
 
+# VIEWER Compatibility
+Tested Working: Edge & Chrome & Firefox on Windows, Chrome on Android, Safari on iPhone
+
+# BUILDER Compatibility
+Tested Working: Edge & Chrome on Windows
+Tested NOT Working (drag & drop fails): Firefox on Windows, Brave on Linux
+
 # ALPHA
 This is an early version of FunShow & may contain unknown bugs or have missing features. It is functional for my own purposes, but it will evolve as it is adapted for the needs of others & as my own needs from it evolve.
 
