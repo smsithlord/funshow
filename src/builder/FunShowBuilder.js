@@ -1253,7 +1253,7 @@ console.log(slideshow.items[1]);*/
                         <p>JSON</p>
                         <small>Download raw JSON data</small>
                     </div>
-                    <div class="funshow-builder-download-option funshow-env-hide-if-local" data-type="user">
+                    <div class="funshow-builder-download-option funshow-env-hide-if-local" data-type="user" style="display: none !important;">
                         <svg viewBox="0 0 24 24" width="48" height="48">
                             <path d="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/>
                             <path d="M10 16l5-3-5-3v6z" fill="#fff"/>
@@ -1261,7 +1261,7 @@ console.log(slideshow.items[1]);*/
                         <p>Slideshow Folder</p>
                         <small>Package for end-users</small>
                     </div>
-                    <div class="funshow-builder-download-option funshow-env-hide-if-local" data-type="dev">
+                    <div class="funshow-builder-download-option funshow-env-hide-if-local" data-type="dev" style="display: none !important;">
                         <svg viewBox="0 0 24 24" width="48" height="48">
                             <path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/>
                         </svg>
@@ -1269,7 +1269,7 @@ console.log(slideshow.items[1]);*/
                         <small>Full package for developers</small>
                     </div>
                 </div>
-                <div class="funshow-builder-version-select funshow-builder-viewer-version-select funshow-env-hide-if-local">
+                <div class="funshow-builder-version-select funshow-builder-viewer-version-select funshow-env-hide-if-local" style="display: none !important;">
                     <select disabled>
                         <option value="alpha">FunShow v0.0.1 ALPHA</option>
                     </select>
