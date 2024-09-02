@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <!-- This document is an example of how to embed the viewer directly into its own page. EDIT abilities are optional & can be removed. -->
-    <!-- URL params can be removed - but you need at least 1 to remain to be able to pass it a slideshow through URL parameters. -->
+    <!-- URL param support is optional & can be removed - but you need to load your slideshow's JSON **somehow** to be able to pass it to the slideshow constructor. -->
 
     <meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover' />
     <meta charset='utf-8'>
@@ -38,21 +38,25 @@
 
     async function onDOMContentLoaded() {
 
+        // The constructor for window.funShowEnvironment.startShow() takes the JSON that was exported from the BUILDER.
+        // The easiest way to get this JSON is through a URL GET parameter of ?s=YOUR_JSON_URL_HERE.json
+        // For example: viewer.html?s=MyJson.json
+        // The code below checks the URL parameter for various types media to initialize a slideshow with.
+
         let firstSlideshow = null;
         const slideshowUrlParams = await window.funShowEnvironment.getSlideshowUrlParams();
 
-        if( slideshowUrlParams.s.value ) {
+        if( slideshowUrlParams.s.value ) {  // SLIDESHOW (RECOMMENDED): A URL to a JSON file exported from the BUILDER in the "s" URL parameter.
             firstSlideshow = slideshowUrlParams.s.value;
         }
-        else if( slideshowUrlParams.j.value ) {
+        else if( slideshowUrlParams.j.value ) { // JSON: An encoded JSON string directly in the "j" URL parameter.
             firstSlideshow = slideshowUrlParams.j.value;
         }
-        else if( slideshowUrlParams.m.value ) {
+        else if( slideshowUrlParams.m.value ) { // MEDIA: A JSON-encoded MSF (Meta Shortcut Format) item in the "m" URL parameter.
             await window.funShowEnvironment.startShow({mediaLibraryItems: [window.funShowEnvironment.createMediaItemFromMediaUrl(slideshowUrlParams.m.value)], enableUI: false, allowWorkingPath: false});
             return;
         }
-        else if( slideshowUrlParams.ml.value ) {
-            console.log(slideshowUrlParams.ml.value);
+        else if( slideshowUrlParams.ml.value ) {    // MEDIA LIST: A JSON-encoded array of MSF (Meta Shortcut Format) items in the "ml" URL parameter.
             const mediaUrls = slideshowUrlParams.ml.value;
             const items = [];
             mediaUrls.forEach(mediaUrl=>{
@@ -62,7 +66,7 @@
             return;
         }
 
-
+        // If ANY initial media was detected, initialize a slideshow with it.
         if( firstSlideshow ) {
             await window.funShowEnvironment.startShow({slideshow: firstSlideshow, enableUI: false, allowWorkingPath: false});
         }
