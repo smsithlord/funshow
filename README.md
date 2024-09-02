@@ -3,6 +3,9 @@ FunShow is an tool for creating and viewing interactive slideshows of text, imag
 It supports using it as an INDIVIDUAL in OFFLINE MODE, or using it as a DEVELOPER deploying it in SERVER MODE.
 For usage help, open index.html and click HELP.
 
+# Live Demo
+https://smsithlord.github.io/funshow/
+
 # ALPHA
 This is an early version of FunShow & may contain unknown bugs or have missing features. It is functional for my own purposes, but it will evolve as it is adapted for the needs of others & as my own needs from it evolve.
 
