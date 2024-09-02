@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover' />
+    <meta charset='utf-8'>
+    <title>FunShow</title>
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #000;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            font-family: Arial, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <!-- SRC mode scripts -->
+    <script src="src/thirdparty/jszip.min.js"></script>
+    <script src="src/thirdparty/bundle.min.js"></script>
+    <script src="src/shared/FunShowEventEmitter.js"></script>
+    <script src="src/shared/FunShowEnvironmentDetector.js"></script>
+    <script src="src/shared/FunShowMediaLibraryDragAndDropBuilder.js"></script>
+    <script src="src/builder/FunShowFilePacker.js"></script>
+    <script src="src/builder/FunShowBuilder.js"></script>
+    <script src="src/viewer/FunShowZoomPan.js"></script>
+    <script src="src/viewer/FunShow.js"></script>
+    <script src="src/viewer/FunShowSlide.js"></script>
+    <script src="src/viewer/FunShowStage.js"></script>
+    <script src="src/viewer/FunShowStagePanelPlaylist.js"></script>
+
+    <!-- DIST mode scripts -->
+    <!--script src="dist/thirdparty/jszip.min.js"></script>
+    <script src="dist/thirdparty/bundle.min.js"></script>
+    <script src="dist/funshow-shared.min.js"></script>
+    <script src="dist/funshow-builder.min.js"></script>
+    <script src="dist/funshow-viewer.min.js"></script-->
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const builder = new FunShowBuilder();
+        });
+    </script>
+</body>
+</html>

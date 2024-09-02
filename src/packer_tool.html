@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FunShow Packer Tool</title>
+    <script src="thirdparty/jszip.min.js"></script>
+    <script src="thirdparty/bundle.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+            background-color: #1a1a1a;
+            color: #ffffff;
+            transition: background-color 0.5s ease;
+        }
+        h1 {
+            color: #4CAF50;
+            text-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+        }
+        #drop-zone {
+            width: 300px;
+            height: 200px;
+            border: 2px dashed #4CAF50;
+            border-radius: 20px;
+            text-align: center;
+            padding: 20px;
+            margin: 20px auto;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #drop-zone.dragging {
+            background-color: rgba(76, 175, 80, 0.2);
+        }
+        select, button {
+            margin: 10px 10px;
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        select:hover, button:hover {
+            background-color: #45a049;
+        }
+        select:focus, button:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.5);
+        }
+        @keyframes backgroundPulse {
+            0% { background-color: #1a1a1a; }
+            50% { background-color: #2a2a2a; }
+            100% { background-color: #1a1a1a; }
+        }
+    </style>
+</head>
+<body>
+    <h1>FunShow Packer Tool</h1>
+    
+    <select id="manifest-select">
+        <option value="all">All</option>
+        <option value="shared">Shared Assets</option>
+        <option value="viewer">Viewer Assets</option>
+        <option value="builder">Builder Assets</option>
+    </select>
+    
+    <button id="bundle-button">Bundle & Download</button>
+    
+    <div id="drop-zone">
+        Or drag & drop any JS files here
+    </div>
+
+    <script>
+        const manifests = {
+            "shared": {
+                "name": "Shared Assets",
+                "filename": "funshow-shared.min.js",
+                "description": "These are files used by both the VIEWER and the EDITOR.",
+                "files": [
+                    {"file": "shared/FunShowEventEmitter.js"},
+                    {"file": "shared/FunShowEnvironmentDetector.js"},
+                    {"file": "shared/FunShowMediaLibraryDragAndDropBuilder.js"}
+                ]
+            },
+            "viewer": {
+                "name": "Viewer Assets",
+                "filename": "funshow-viewer.min.js",
+                "description": "These are files used by ONLY the viewer.",
+                "files": [
+                    {"file": "viewer/FunShow.js"},
+                    {"file": "viewer/FunShowSlide.js"},
+                    {"file": "viewer/FunShowStage.js"},
+                    {"file": "viewer/FunShowStagePanelPlaylist.js"},
+                    {"file": "viewer/FunShowStagePanelToolbar.js"},
+                    {"file": "viewer/FunShowHelpInput.js"},
+                    {"file": "viewer/FunShowZoomPan.js"}
+                ]
+            },
+            "builder": {
+                "name": "Builder Assets",
+                "filename": "funshow-builder.min.js",
+                "description": "These are files used by ONLY the builder.",
+                "files": [
+                    {"file": "builder/FunShowSplash.js"},
+                    {"file": "builder/FunShowHelp.js"},
+                    {"file": "builder/FunShowFilePacker.js"},
+                    {"file": "builder/FunShowBuilder.js"}
+                ]
+            }
+        };
+
+        const dropZone = document.getElementById('drop-zone');
+        const manifestSelect = document.getElementById('manifest-select');
+        const bundleButton = document.getElementById('bundle-button');
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragging');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragging');
+        });
+
+        dropZone.addEventListener('drop', handleDrop);
+        bundleButton.addEventListener('click', handleBundleClick);
+
+        async function handleDrop(event) {
+            event.preventDefault();
+            dropZone.classList.remove('dragging');
+
+            const items = event.dataTransfer.items;
+            const jsFiles = [];
+
+            for (const item of items) {
+                if (item.kind === 'file') {
+                    const file = item.getAsFile();
+                    if (file.name.endsWith('.js')) {
+                        jsFiles.push(file);
+                    }
+                }
+            }
+
+            if (jsFiles.length === 0) {
+                alert('No .js files found. Please drop at least one .js file.');
+                return;
+            }
+
+            await processFiles(jsFiles);
+        }
+
+        async function handleBundleClick() {
+            const selectedManifest = manifestSelect.value;
+            if (selectedManifest === 'all') {
+                await processAllManifests();
+            } else if (selectedManifest) {
+                const manifest = manifests[selectedManifest];
+                const jsFiles = await fetchManifestFiles(manifest.files);
+                await processFiles(jsFiles, manifest.filename);
+            } else {
+                alert('Please select a manifest from the dropdown.');
+            }
+        }
+
+        async function processAllManifests() {
+            const zip = new JSZip();
+            for (const [key, manifest] of Object.entries(manifests)) {
+                const jsFiles = await fetchManifestFiles(manifest.files);
+                const combinedCode = await combineFiles(jsFiles);
+                const minifiedCode = await minifyCode(combinedCode);
+                zip.file(manifest.filename, minifiedCode);
+            }
+            const content = await zip.generateAsync({type: "blob"});
+            downloadFile(content, "funshow-all-minified.zip");
+        }
+
+        async function fetchManifestFiles(files) {
+            const jsFiles = [];
+            for (const file of files) {
+                const response = await fetch(file.file);
+                const blob = await response.blob();
+                jsFiles.push(new File([blob], file.file.split('/').pop(), { type: 'application/javascript' }));
+            }
+            return jsFiles;
+        }
+
+        async function processFiles(jsFiles, filename = 'unknown-bundle.min.js') {
+            const combinedCode = await combineFiles(jsFiles);
+            const minifiedCode = await minifyCode(combinedCode);
+            downloadFile(minifiedCode, filename);
+        }
+
+        async function combineFiles(files) {
+            const fileContents = await Promise.all(
+                files.map(file => file.text())
+            );
+            return fileContents.join('\n');
+        }
+
+        async function minifyCode(code) {
+            const result = await Terser.minify(code, {
+                mangle: false,
+                compress: false
+            });
+            return result.code;
+        }
+
+        function downloadFile(content, fileName) {
+            const blob = new Blob([content], { type: fileName.endsWith('.zip') ? 'application/zip' : 'application/javascript' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            // Trigger background animation
+            document.body.style.animation = 'backgroundPulse 1s ease';
+            setTimeout(() => {
+                document.body.style.animation = '';
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

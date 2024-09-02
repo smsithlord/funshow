@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- This document is an example of how to embed the viewer directly into its own page. EDIT abilities are optional & can be removed. -->
+    <!-- URL params can be removed - but you need at least 1 to remain to be able to pass it a slideshow through URL parameters. -->
+
+    <meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover' />
+    <meta charset='utf-8'>
+    <title>FunShow</title>
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #000;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background-position:  center center;
+            background-size:  cover;
+            background-repeat:  no-repeat;
+        }
+    </style>
+</head>
+<body>
+    <!-- DIST mode scripts -->
+    <script src="dist/thirdparty/jszip.min.js"></script><!-- for EDIT ability -->
+    <script src="dist/thirdparty/bundle.min.js"></script><!-- for EDIT ability -->
+    <script src="dist/funshow-shared.min.js"></script>
+    <script src="dist/funshow-builder.min.js"></script><!-- for EDIT ability -->
+    <script src="dist/funshow-viewer.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', onDOMContentLoaded);
+
+    async function onDOMContentLoaded() {
+
+        let firstSlideshow = null;
+        const slideshowUrlParams = await window.funShowEnvironment.getSlideshowUrlParams();
+
+        if( slideshowUrlParams.s.value ) {
+            firstSlideshow = slideshowUrlParams.s.value;
+        }
+        else if( slideshowUrlParams.j.value ) {
+            firstSlideshow = slideshowUrlParams.j.value;
+        }
+        else if( slideshowUrlParams.m.value ) {
+            await window.funShowEnvironment.startShow({mediaLibraryItems: [window.funShowEnvironment.createMediaItemFromMediaUrl(slideshowUrlParams.m.value)], enableUI: false, allowWorkingPath: false});
+            return;
+        }
+        else if( slideshowUrlParams.ml.value ) {
+            console.log(slideshowUrlParams.ml.value);
+            const mediaUrls = slideshowUrlParams.ml.value;
+            const items = [];
+            mediaUrls.forEach(mediaUrl=>{
+                items.push(window.funShowEnvironment.createMediaItemFromMediaUrl(mediaUrl));
+            });
+            await window.funShowEnvironment.startShow({mediaLibraryItems: items, enableUI: false, allowWorkingPath: false});
+            return;
+        }
+
+
+        if( firstSlideshow ) {
+            await window.funShowEnvironment.startShow({slideshow: firstSlideshow, enableUI: false, allowWorkingPath: false});
+        }
+    }
+</script>
+
+</body>
+</html>
